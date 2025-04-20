@@ -14,6 +14,9 @@ document.addEventListener("DOMContentLoaded", function () {
     "2025-04-20": { title: "Birthday Party", attendees: 35, location: "Garden Area" },
     "2025-04-25": { title: "Wedding Reception", attendees: 200, location: "Grand Ballroom" },
     "2025-04-30": { title: "Product Launch", attendees: 85, location: "Exhibition Center" }
+
+    
+    
   };
 
   // Menu toggle
@@ -60,6 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
     console.warn("Swiper is not defined");
   }
 
+  
   // Tooltip
   const tooltipEl = document.createElement('div');
   tooltipEl.className = 'date-tooltip';
@@ -315,3 +319,20 @@ document.addEventListener("DOMContentLoaded", function () {
   // Handle window resize to adjust modal layout
   window.addEventListener('resize', adjustModalLayout);
 });
+
+//contact us form to show thnks msg
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById('contactForm');
+  const thankYouMessage = document.getElementById('thankYouMessage');
+
+  form.addEventListener('submit', function (e) {
+      e.preventDefault(); // Prevent the page from refreshing
+
+      // Hide the form
+      form.style.display = 'none';
+
+      // Show the Thank You message
+      thankYouMessage.style.display = 'block';
+  });
+});
+

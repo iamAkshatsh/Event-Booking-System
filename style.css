@@ -56,8 +56,7 @@ body{
 
 .header .navbar{
     display: flex;
-}
-
+}  
 .header .navbar a{
     font-size: 1.7rem;
     color: #fff;
@@ -843,3 +842,194 @@ body{
     font-size: 1.5rem;
     margin-top: 15px;
 }
+/* Final Updated CSS for the Reviews Section */
+.reviews {
+    padding: 6rem 9%;
+    background-color: #222; /* Same as body background */
+    text-align: center;
+}
+
+.reviews .heading {
+    font-size: 4rem;
+    color: #fff; /* White for "CLIENT'S" */
+    margin-bottom: 4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.reviews .heading span {
+    color: var(--theme-color); /* Blue for "REVIEWS" */
+}
+
+.reviews .box-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+    gap: 1.5rem;
+}
+
+.reviews .box-container .box {
+    background: #333; /* Same as header background */
+    border-radius: 0.5rem;
+    padding: 2rem;
+    text-align: center;
+}
+
+.reviews .box-container .box img {
+    height: 7rem;
+    width: 7rem;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1rem;
+}
+
+.reviews .box-container .box h3 {
+    color: #fff;
+    font-size: 1.7rem;
+    margin-bottom: .5rem;
+}
+
+.reviews .box-container .box .stars i {
+    color: #ffc107; /* Maintaining the gold star color */
+    font-size: 1.2rem;
+    padding: .2rem 0;
+}
+
+.reviews .box-container .box p {
+    color: #eee;
+    font-size: 1.5rem;
+    line-height: 1.5;
+}
+
+/* Final Updated CSS for the Contact Us Section */
+.contact {
+    padding: 6rem 9%;
+    background: #222; /* Same as body background */
+}
+
+.contact .heading {
+    font-size: 4rem;
+    color: #fff; /* White for "CONTACT" */
+    margin-bottom: 3rem;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.contact .heading span {
+    color: var(--theme-color); /* Blue for "US" */
+}
+
+.contact .row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.contact .row .image {
+    flex: 1 1 40rem;
+}
+
+.contact .row .image img {
+    width: 100%;
+    border-radius: 0.5rem;
+}
+
+.contact .row form {
+    background: #333; /* Same as header background */
+    padding: 3rem;
+    border-radius: 0.5rem;
+    flex: 1 1 40rem;
+}
+
+.contact .row form .inputBox {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.contact .row form .inputBox input,
+.contact .row form textarea {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    font-size: 1.6rem;
+    color: #fff;
+    background: #444;
+    text-transform: none;
+    margin-bottom: 1rem;
+    border: 1px solid #444; /* Added border for input fields */
+}
+
+.contact .row form .inputBox input:focus,
+.contact .row form textarea:focus {
+    border-color: var(--theme-color);
+}
+
+.contact .row form textarea {
+    height: 15rem;
+    resize: vertical;
+}
+
+.contact .row form .btn {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: .8rem 3rem;
+    border-radius: 0.5rem;
+    background: var(--theme-color); /* Blue for the button */
+    color: #fff; /* White text on the blue button */
+    cursor: pointer;
+    font-size: 1.7rem;
+    border: none; /* Removed button border */
+}
+
+.contact .row form .btn:hover {
+    background: #274cb3; /* Darker blue on hover */
+}
+/* Style for the Thank You message */
+.thank-you-message {
+    background-color: #f0f8ff;
+    color: #3867d6;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    margin-top: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.thank-you-message h3 {
+    margin-bottom: 10px;
+    font-size: 1.8rem;
+}
+
+.thank-you-message p {
+    font-size: 1.4rem;
+}
+
+/* Footer Section */
+footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: #222;
+    padding: 2rem 0;
+    color: white;
+  }
+  
+  footer .social-links {
+    margin-bottom: 1rem;
+  }
+  
+  footer .social-links a {
+    color: white;
+    margin: 0 10px;
+    font-size: 2.5rem;
+    transition: color 0.3s ease;
+  }
+  
+  footer .social-links a:hover {
+    color: #3867d6;
+  }
+  
