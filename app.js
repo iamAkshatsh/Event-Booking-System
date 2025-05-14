@@ -242,45 +242,296 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  if (eventForm) {
-    eventForm.addEventListener("submit", (e) => {
-      e.preventDefault();
+  // Replace the existing event form submission handler with this code
+// Find this section in your app.js file
 
-      const name = document.querySelector("#name").value.trim();
-      const email = document.querySelector("#email").value.trim();
-      const phone = document.querySelector("#phone")?.value.trim() || "";
-      const eventType = document.querySelector("#eventType").value;
-      const attendees = document.querySelector("#attendees")?.value || "1";
-      const selectedDate = document.querySelector("#selectedDate")?.value || "";
+if (eventForm) {
+  eventForm.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-      if (!name) return alert("Please enter your name");
-      if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) return alert("Enter a valid email");
-      if (phone && !phone.match(/^[0-9+\- ]{10,15}$/)) return alert("Enter a valid phone number");
-      if (!selectedDate) return alert("Select a date");
+    const name = document.querySelector("#name").value.trim();
+    const email = document.querySelector("#email").value.trim();
+    const phone = document.querySelector("#phone")?.value.trim() || "";
+    const eventType = document.querySelector("#eventType").value;
+    const attendees = document.querySelector("#attendees")?.value || "1";
+    const selectedDate = document.querySelector("#selectedDate")?.value || "";
 
-      const formWrapper = document.querySelector("#form-wrapper");
-      formWrapper.innerHTML = `
-        <div class="confirmation-message" style="text-align: center; padding: 20px; background: rgba(56, 103, 214, 0.1); border-radius: 10px; margin-bottom: 20px;">
-          <h3 style="margin-bottom: 15px; color: #3867d6;">Booking Confirmed!</h3>
-          <p style="font-size: 1.6rem; margin-bottom: 10px;">Thank you, ${name}!</p>
-          <p style="font-size: 1.4rem; margin-bottom: 5px;">Your ${eventType === 'booking' ? 'event booking' : 'event schedule'} is set for ${selectedDate}.</p>
-          <p style="font-size: 1.4rem; margin-bottom: 20px;">Confirmation sent to ${email}.</p>
-          <button id="closeConfirmation" style="background: #3867d6; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 1.5rem;">Close</button>
+    if (!name) return alert("Please enter your name");
+    if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) return alert("Enter a valid email");
+    if (phone && !phone.match(/^[0-9+\- ]{10,15}$/)) return alert("Enter a valid phone number");
+    if (!selectedDate) return alert("Select a date");
+
+    const baseCost = eventType === 'booking' ? 2000 : 1500;
+    const attendeeCost = parseInt(attendees) * 200;
+    const totalCost = baseCost + attendeeCost;
+
+    const formWrapper = document.querySelector("#form-wrapper");
+    formWrapper.innerHTML = `
+      <div class="payment-container" style="padding: 20px; background: rgba(56, 103, 214, 0.1); border-radius: 10px; margin-bottom: 20px;">
+        <h3 style="margin-bottom: 15px; color: #3867d6; text-align: center;">Complete Your Payment</h3>
+        
+        <div class="order-summary" style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+          <h4 style="margin-bottom: 10px; color: #333;">Order Summary</h4>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 5px;"><span>Event Type:</span><span>${eventType === 'booking' ? 'Event Booking' : 'Event Schedule'}</span></div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 5px;"><span>Date:</span><span>${selectedDate}</span></div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 5px;"><span>Attendees:</span><span>${attendees}</span></div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 5px;"><span>Base Price:</span><span>₹${baseCost.toLocaleString()}</span></div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 5px;"><span>Attendee Fee:</span><span>₹${attendeeCost.toLocaleString()}</span></div>
+          <div style="display: flex; justify-content: space-between; padding-top: 10px; border-top: 1px solid #eee; font-weight: bold;"><span>Total:</span><span>₹${totalCost.toLocaleString()}</span></div>
         </div>
-      `;
-      
-      // Scroll to see confirmation message
-      formWrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-      document.querySelector("#closeConfirmation").addEventListener("click", () => {
-        calendarModal.style.display = "none";
-        if (flatpickrInstance) {
-          flatpickrInstance.destroy();
-          flatpickrInstance = null;
+        <div class="payment-methods" style="margin-bottom: 20px;">
+          <h4 style="margin-bottom: 10px; color: #333;">Payment Method</h4>
+          <div class="payment-options" style="display: flex; flex-direction: column; gap: 10px;">
+            <label class="payment-option" style="display: flex; align-items: center; padding: 10px; border: 1px solid #ddd; border-radius: 5px; cursor: pointer;">
+              <input type="radio" name="paymentMethod" value="card" checked style="margin-right: 10px;">
+              <span style="flex-grow: 1;">Credit/Debit Card</span>
+              <div class="card-icons" style="display: flex; gap: 5px;">
+                <i class="fab fa-cc-visa" style="font-size: 24px; color: #1A1F71;"></i>
+                <i class="fab fa-cc-mastercard" style="font-size: 24px; color: #EB001B;"></i>
+                <i class="fab fa-cc-amex" style="font-size: 24px; color: #006FCF;"></i>
+              </div>
+            </label>
+            <label class="payment-option" style="display: flex; align-items: center; padding: 10px; border: 1px solid #ddd; border-radius: 5px; cursor: pointer;">
+              <input type="radio" name="paymentMethod" value="upi" style="margin-right: 10px;">
+              <span style="flex-grow: 1;">UPI</span>
+              <i class="fas fa-mobile-alt" style="font-size: 24px; color: #6A5ACD;"></i>
+            </label>
+            <label class="payment-option" style="display: flex; align-items: center; padding: 10px; border: 1px solid #ddd; border-radius: 5px; cursor: pointer;">
+              <input type="radio" name="paymentMethod" value="netbanking" style="margin-right: 10px;">
+              <span style="flex-grow: 1;">Net Banking</span>
+              <i class="fas fa-university" style="font-size: 24px; color: #228B22;"></i>
+            </label>
+          </div>
+        </div>
+
+        <div id="card-payment-form" style="padding: 15px; background: white; border-radius: 8px; margin-bottom: 20px;">
+          <h4 style="margin-bottom: 10px; color: #333;">Card Details</h4>
+          <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px;">Card Number</label>
+            <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+          </div>
+          <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+            <div style="flex: 1;">
+              <label style="display: block; margin-bottom: 5px;">Expiry Date</label>
+              <input type="text" id="expiryDate" placeholder="MM/YY" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+            </div>
+            <div style="flex: 1;">
+              <label style="display: block; margin-bottom: 5px;">CVV</label>
+              <input type="text" id="cvv" placeholder="123" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+            </div>
+          </div>
+          <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px;">Name on Card</label>
+            <input type="text" id="nameOnCard" placeholder="John Doe" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; gap: 10px;">
+          <button id="backToForm" style="padding: 10px 20px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; font-size: 1.5rem;">Back</button>
+          <button id="processPayment" style="flex-grow: 1; padding: 10px 20px; background: #3867d6; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1.5rem;">Pay ₹${totalCost.toLocaleString()}</button>
+        </div>
+      </div>
+    `;
+
+    const bookingDetails = { name, email, phone, eventType, attendees, selectedDate, totalCost };
+
+    document.querySelector("#backToForm").addEventListener("click", () => {
+      eventForm.reset();
+      initializeEventForm();
+    });
+
+    const paymentOptions = document.querySelectorAll('input[name="paymentMethod"]');
+    const cardForm = document.querySelector('#card-payment-form');
+    const paymentSection = document.querySelector(".payment-methods");
+
+    const upiInputHTML = `
+      <div id="upi-section" style="padding: 15px; background: white; border-radius: 8px; margin-bottom: 20px;">
+        <h4 style="margin-bottom: 10px; color: #333;">Enter your UPI ID</h4>
+        <input type="text" id="upiId" placeholder="example@upi" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+      </div>
+    `;
+
+    let upiSection = null;
+
+    paymentOptions.forEach(option => {
+      option.addEventListener('change', function () {
+        const selected = this.value;
+        if (selected === 'card') {
+          cardForm.style.display = 'block';
+          if (upiSection) upiSection.remove();
+        } else {
+          cardForm.style.display = 'none';
+          if (!upiSection && selected === 'upi') {
+            paymentSection.insertAdjacentHTML('afterend', upiInputHTML);
+            upiSection = document.querySelector("#upi-section");
+          } else if (upiSection) {
+            upiSection.style.display = selected === 'upi' ? 'block' : 'none';
+          }
         }
       });
     });
+
+    document.querySelector("#processPayment").addEventListener("click", () => {
+      const selectedMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+      const payButton = document.querySelector("#processPayment");
+      const originalText = payButton.textContent;
+      payButton.textContent = "Processing...";
+      payButton.disabled = true;
+
+      if (selectedMethod === 'card') {
+        const cardNumber = document.querySelector("#cardNumber").value.trim();
+        const expiryDate = document.querySelector("#expiryDate").value.trim();
+        const cvv = document.querySelector("#cvv").value.trim();
+        const nameOnCard = document.querySelector("#nameOnCard").value.trim();
+
+        if (!cardNumber || !expiryDate || !cvv || !nameOnCard) {
+          alert("Please fill in all card details");
+          payButton.textContent = originalText;
+          payButton.disabled = false;
+          return;
+        }
+
+        setTimeout(() => showConfirmation(bookingDetails), 2000);
+
+      } else if (selectedMethod === 'upi') {
+        const upiId = document.querySelector("#upiId")?.value.trim();
+        if (!upiId || !upiId.match(/^\w+@\w+$/)) {
+          alert("Please enter a valid UPI ID (e.g., name@bank)");
+          payButton.textContent = originalText;
+          payButton.disabled = false;
+          return;
+        }
+
+        setTimeout(() => {
+          alert(`A payment request has been sent to your UPI ID: ${upiId}. Please approve it in your UPI app.`);
+          showConfirmation(bookingDetails);
+        }, 1500);
+
+      } else {
+        setTimeout(() => showConfirmation(bookingDetails), 2000);
+      }
+    });
+  });
+}
+
+function showConfirmation(details) {
+  const formWrapper = document.querySelector("#form-wrapper");
+
+  formWrapper.innerHTML = `
+    <div class="confirmation-message" style="text-align: center; padding: 20px; background: rgba(56, 103, 214, 0.1); border-radius: 10px; margin-bottom: 20px;">
+      <div style="font-size: 48px; color: #3867d6; margin-bottom: 15px;">✓</div>
+      <h3 style="margin-bottom: 15px; color: #3867d6;">Payment Successful!</h3>
+      <p style="font-size: 1.6rem; margin-bottom: 10px;">Thank you, ${details.name}!</p>
+      <p style="font-size: 1.4rem; margin-bottom: 5px;">Your ${details.eventType === 'booking' ? 'event booking' : 'event schedule'} is confirmed for ${details.selectedDate}.</p>
+      <p style="font-size: 1.4rem; margin-bottom: 5px;">Total paid: ₹${details.totalCost.toLocaleString()}</p>
+      <p style="font-size: 1.4rem; margin-bottom: 20px;">Booking confirmation sent to ${details.email}.</p>
+      <button id="closeConfirmation" style="background: #3867d6; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 1.5rem;">Close</button>
+    </div>
+  `;
+
+  formWrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  document.querySelector("#closeConfirmation").addEventListener("click", () => {
+    calendarModal.style.display = "none";
+    if (flatpickrInstance) {
+      flatpickrInstance.destroy();
+      flatpickrInstance = null;
+    }
+  });
+}
+
+function initializeEventForm() {
+  const formWrapper = document.querySelector("#form-wrapper");
+  formWrapper.innerHTML = `
+    <form id="eventForm">
+      <label for="name">Name:</label>
+      <input type="text" id="name" required />
+      <label for="email">Email:</label>
+      <input type="email" id="email" required />
+      <label for="phone">Contact Number:</label>
+      <input type="tel" id="phone" required />
+      <label for="eventType">Event Type:</label>
+      <select id="eventType" name="eventType">
+        <option value="booking">Book Event</option>
+        <option value="scheduling">Schedule Event</option>
+      </select>
+      <label for="attendees">Number of Attendees:</label>
+      <input type="number" id="attendees" min="1" required />
+      <button type="submit">Continue to Payment</button>
+    </form>
+  `;
+
+  const newForm = document.querySelector("#eventForm");
+  if (newForm) {
+    newForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      // Will reattach main submit listener
+    });
   }
+}
+
+
+// Add this function to show the confirmation after payment
+function showConfirmation(details) {
+  const formWrapper = document.querySelector("#form-wrapper");
+  
+  formWrapper.innerHTML = `
+    <div class="confirmation-message" style="text-align: center; padding: 20px; background: rgba(56, 103, 214, 0.1); border-radius: 10px; margin-bottom: 20px;">
+      <div style="font-size: 48px; color: #3867d6; margin-bottom: 15px;">✓</div>
+      <h3 style="margin-bottom: 15px; color: #3867d6;">Payment Successful!</h3>
+      <p style="font-size: 1.6rem; margin-bottom: 10px;">Thank you, ${details.name}!</p>
+      <p style="font-size: 1.4rem; margin-bottom: 5px;">Your ${details.eventType === 'booking' ? 'event booking' : 'event schedule'} is confirmed for ${details.selectedDate}.</p>
+      <p style="font-size: 1.4rem; margin-bottom: 5px;">Total paid: ₹${details.totalCost.toLocaleString()}</p>
+      <p style="font-size: 1.4rem; margin-bottom: 20px;">Booking confirmation sent to ${details.email}.</p>
+      <button id="closeConfirmation" style="background: #3867d6; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 1.5rem;">Close</button>
+    </div>
+  `;
+  
+  // Scroll to see confirmation message
+  formWrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  document.querySelector("#closeConfirmation").addEventListener("click", () => {
+    calendarModal.style.display = "none";
+    if (flatpickrInstance) {
+      flatpickrInstance.destroy();
+      flatpickrInstance = null;
+    }
+  });
+}
+
+// Helper function to initialize the event form
+function initializeEventForm() {
+  const formWrapper = document.querySelector("#form-wrapper");
+  formWrapper.innerHTML = `
+    <form id="eventForm">
+      <label for="name">Name:</label>
+      <input type="text" id="name" required />
+      <label for="email">Email:</label>
+      <input type="email" id="email" required />
+      <label for="phone">Contact Number:</label>
+      <input type="tel" id="phone" required />
+      <label for="eventType">Event Type:</label>
+      <select id="eventType" name="eventType">
+        <option value="booking">Book Event</option>
+        <option value="scheduling">Schedule Event</option>
+      </select>
+      <label for="attendees">Number of Attendees:</label>
+      <input type="number" id="attendees" min="1" required />
+      <button type="submit">Continue to Payment</button>
+    </form>
+  `;
+  
+  // Re-attach event listener to the new form
+  const newForm = document.querySelector("#eventForm");
+  if (newForm) {
+    newForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      // The original submit handler will be called again
+    });
+  }
+}
 
   function closeModal() {
     calendarModal.style.display = "none";
@@ -335,4 +586,131 @@ document.addEventListener("DOMContentLoaded", function () {
       thankYouMessage.style.display = 'block';
   });
 });
+
+
+//get started things button code//
+
+document.addEventListener("DOMContentLoaded", function () {
+  const getStartedBtn = document.getElementById("getStartedBtn");
+
+  const modal = document.createElement("div");
+  modal.className = "auth-modal";
+  document.body.appendChild(modal);
+
+  getStartedBtn.addEventListener("click", function (e) {
+    e.preventDefault();
+    showAuthModal();
+  });
+
+  function showAuthModal() {
+    modal.style.display = "flex";
+
+    modal.innerHTML = `
+      <div class="auth-modal-content">
+        <span class="close-auth">&times;</span>
+        <div class="auth-container">
+          <h2>Select Account Type</h2>
+          <div class="account-type-buttons">
+            <button class="account-type" data-type="user">User</button>
+            <button class="account-type" data-type="vendor">Vendor</button>
+          </div>
+
+          <div id="form-container" style="display:none;">
+            <h3 id="form-title">Sign Up</h3>
+            <form id="authForm">
+              <input type="text" id="username" name="username" placeholder="Full Name" required>
+              <input type="email" id="email" name="email" placeholder="Email" required>
+              <input type="password" id="password" name="password" placeholder="Password" required>
+              <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
+
+              <div class="form-footer">
+                <button type="submit">Sign Up</button>
+                <p class="toggle-link">Already have an account? <a href="#" id="toggleForm">Login</a></p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const closeBtn = modal.querySelector(".close-auth");
+    const accountButtons = modal.querySelectorAll(".account-type");
+    const formContainer = modal.querySelector("#form-container");
+    const toggleLinkArea = modal.querySelector(".toggle-link");
+
+    closeBtn.addEventListener("click", () => {
+      modal.style.display = "none";
+    });
+
+    accountButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const accountType = btn.dataset.type;
+        formContainer.style.display = "block";
+        document.getElementById("form-title").textContent = `Sign Up as ${accountType}`;
+      });
+    });
+
+    formContainer.addEventListener("click", function (e) {
+      if (e.target.id === "toggleForm") {
+        e.preventDefault();
+        const title = document.getElementById("form-title");
+        const confirmPassword = document.getElementById("confirmPassword");
+        const button = modal.querySelector("#authForm button");
+
+        if (title.textContent.includes("Login")) {
+          title.textContent = "Sign Up";
+          button.textContent = "Sign Up";
+          toggleLinkArea.innerHTML = `Already have an account? <a href="#" id="toggleForm">Login</a>`;
+          confirmPassword.style.display = "block";
+        } else {
+          title.textContent = "Login";
+          button.textContent = "Login";
+          toggleLinkArea.innerHTML = `Don't have an account? <a href="#" id="toggleForm">Sign Up</a>`;
+          confirmPassword.style.display = "none";
+        }
+      }
+    });
+
+    modal.querySelector("#authForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const username = modal.querySelector("#username").value.trim();
+      const email = modal.querySelector("#email").value.trim();
+      const password = modal.querySelector("#password").value.trim();
+      const confirmPassword = modal.querySelector("#confirmPassword").value.trim();
+      const isSignup = document.getElementById("form-title").textContent.includes("Sign Up");
+
+      if (!username || !email || !password) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      if (isSignup && password !== confirmPassword) {
+        alert("Passwords do not match.");
+        return;
+      }
+
+      // 🎉 Show congratulations message
+      const action = isSignup ? "Account Created" : "Logged In";
+      const user = username || email;
+
+      formContainer.innerHTML = `
+        <h3 style="text-align:center;">🎉 Congratulations!</h3>
+        <p style="text-align:center; font-size: 1.1rem;">${action} Successfully<br><strong>${user}</strong></p>
+        <button id="closeAfterSuccess" style="margin-top: 20px;">Close</button>
+      `;
+
+      modal.querySelector("#closeAfterSuccess").addEventListener("click", () => {
+        modal.style.display = "none";
+      });
+    });
+
+    window.addEventListener("click", function (e) {
+      if (e.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+  }
+});
+
 
